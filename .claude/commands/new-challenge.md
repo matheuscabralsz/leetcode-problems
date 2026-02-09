@@ -1,4 +1,4 @@
-/reYou are scaffolding a new LeetCode challenge. The problem number is: $ARGUMENTS
+You are scaffolding a new LeetCode challenge. The problem number is: $ARGUMENTS
 
 Follow these steps:
 
@@ -16,9 +16,14 @@ Follow these steps:
    bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnType>' '<params>'
    ```
 
-4. **Add example test cases**: After the script creates the files, read the generated `SolutionTest.java` and replace the placeholder test with the LeetCode example test cases for this problem. Each example should be a separate `@ParameterizedTest` method with a descriptive name. Follow the existing test conventions in this project (see `src/test/java/com/leetcode/p0219_contains_duplicate_ii/SolutionTest.java` for reference).
+4. **Add test cases**: After the script creates the files, read the generated `SolutionTest.java` and replace the placeholder test with test cases for this problem. Include:
+   - All LeetCode example test cases (one `@ParameterizedTest` method each, with a descriptive name).
+   - A few edge cases and boundary tests where appropriate (e.g., empty input, single element, extremes).
+   Follow the existing test conventions in this project (see `src/test/java/com/leetcode/p0219_contains_duplicate_ii/SolutionTest.java` for reference).
 
 Important notes:
 - Use Java types that match LeetCode's Java signature exactly.
-- For `List<List<Integer>>` or other generic types, include the necessary imports in the test file.
+- For `List<List<Integer>>` or other generic types, include the necessary imports in both the source and test files.
+- If the problem uses custom types (e.g., `TreeNode`, `ListNode`), add the required class definitions to the source files.
+- For `void` return types (in-place mutation problems), test by asserting on the mutated input rather than a return value.
 - Make sure the test file compiles by using correct assertions (`assertEquals`, `assertTrue`, `assertArrayEquals`, etc.) based on the return type.
