@@ -11,12 +11,18 @@ Follow these steps:
    - `return_type`: the Java return type (e.g., `int[]`)
    - `params`: the Java method parameters (e.g., `int[] nums, int target`)
 
-3. **Run the script**:
+3. **Confirm with the user**: Before running anything, present the problem details to the user and ask for confirmation using `AskUserQuestion`. Show:
+   - Problem number and title
+   - Method signature: `returnType methodName(params)`
+   - Package name that will be created
+   Ask the user to confirm this is the correct problem. Only proceed if the user confirms. If the user says it's wrong, ask them to provide the correct details or problem number.
+
+4. **Run the script**:
    ```bash
    bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnType>' '<params>'
    ```
 
-4. **Add test cases**: After the script creates the files, read the generated `SolutionTest.java` and replace the placeholder test with test cases for this problem. Include:
+5. **Add test cases**: After the script creates the files, read the generated `SolutionTest.java` and replace the placeholder test with test cases for this problem. Include:
    - All LeetCode example test cases (one `@ParameterizedTest` method each, with a descriptive name).
    - A few edge cases and boundary tests where appropriate (e.g., empty input, single element, extremes).
    Follow the existing test conventions in this project (see `src/test/java/com/leetcode/p0219_contains_duplicate_ii/SolutionTest.java` for reference).
