@@ -11,7 +11,11 @@ class SolutionTest {
 
     static Stream<Solution> solutions() {
         return Stream.of(
-                new Default()
+                new WithStreamsNotThreadSafe(),
+                new WithStreamsThreadSafe1(),
+                new WithStreamsThreadSafe2(),
+                new WithStreamsPureFunctional(),
+                new Optimized()
         );
     }
 
