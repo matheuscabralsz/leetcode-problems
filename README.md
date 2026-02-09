@@ -1,6 +1,6 @@
 # LeetCode Java Solutions
 
-LeetCode solutions in Java 17 with multiple approaches per problem and parameterized tests.
+Scaffold LeetCode challenges locally in seconds. Give it a problem number and get a full project setup — solution interface, stub implementation, and parameterized tests — ready to solve in your IDE.
 
 ## Quick Start
 
@@ -23,19 +23,19 @@ You go from problem number to a fully test-driven setup in seconds. All that's l
 The underlying script can also be run directly:
 
 ```bash
-bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnType>' '<params>'
+bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnType>' '<params>' '[title]' '[description]'
 ```
 
 ```bash
 # Example
-bash scripts/new-challenge.sh 1 two_sum twoSum 'int[]' 'int[] nums, int target'
+bash scripts/new-challenge.sh 1 two_sum twoSum 'int[]' 'int[] nums, int target' 'Two Sum' 'Given an array of integers...'
 ```
 
 ## Structure
 
 Each problem lives in its own package under `com.leetcode.p{number}_{name}`:
 
-- `Solution.java` — interface defining the method signature
+- `Solution.java` — interface with the method signature and the problem description as a Javadoc comment
 - `Default.java` / other classes — different solution approaches
 - `SolutionTest.java` — parameterized tests that run against all implementations
 

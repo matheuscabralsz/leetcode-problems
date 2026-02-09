@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: new-challenge.sh <number> <snake_case_name> <methodName> <returnType> <params>
-# Example: new-challenge.sh 1 two_sum twoSum "int[]" "int[] nums, int target"
+# Usage: new-challenge.sh <number> <snake_case_name> <methodName> <returnType> <params> [title] [description]
+# Example: new-challenge.sh 1 two_sum twoSum "int[]" "int[] nums, int target" "Two Sum" "Given an array..."
 
 if [[ $# -lt 5 ]]; then
-  echo "Usage: $0 <number> <snake_case_name> <methodName> <returnType> <params>"
-  echo "Example: $0 1 two_sum twoSum 'int[]' 'int[] nums, int target'"
+  echo "Usage: $0 <number> <snake_case_name> <methodName> <returnType> <params> [title] [description]"
+  echo "Example: $0 1 two_sum twoSum 'int[]' 'int[] nums, int target' 'Two Sum' 'Given an array...'"
   exit 1
 fi
 
@@ -15,6 +15,8 @@ NAME="$2"
 METHOD="$3"
 RETURN_TYPE="$4"
 PARAMS="$5"
+TITLE="${6:-}"
+DESCRIPTION="${7:-}"
 
 # Zero-pad number to 4 digits
 PADDED=$(printf "%04d" "$NUMBER")
@@ -49,13 +51,26 @@ case "$RETURN_TYPE" in
 esac
 
 # --- Solution.java (interface) ---
-cat > "${MAIN_DIR}/Solution.java" <<EOF
-package ${PKG_DOT};
-
-public interface Solution {
-    ${RETURN_TYPE} ${METHOD}(${PARAMS});
-}
-EOF
+{
+  echo "package ${PKG_DOT};"
+  echo ""
+  if [[ -n "$TITLE" || -n "$DESCRIPTION" ]]; then
+    echo "/**"
+    if [[ -n "$TITLE" ]]; then
+      echo " * ${NUMBER}. ${TITLE}"
+      echo " *"
+    fi
+    if [[ -n "$DESCRIPTION" ]]; then
+      while IFS= read -r line; do
+        echo " * ${line}"
+      done <<< "$DESCRIPTION"
+    fi
+    echo " */"
+  fi
+  echo "public interface Solution {"
+  echo "    ${RETURN_TYPE} ${METHOD}(${PARAMS});"
+  echo "}"
+} > "${MAIN_DIR}/Solution.java"
 
 # --- Default.java (stub implementation) ---
 cat > "${MAIN_DIR}/Default.java" <<EOF
