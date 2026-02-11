@@ -1,6 +1,6 @@
-# LeetCode Java Solutions
+# LeetCode Java & TypeScript Solutions
 
-Scaffold LeetCode challenges locally in seconds. Give it a problem number and get a full project setup — solution interface, stub implementation, and parameterized tests — ready to solve in your IDE.
+Scaffold LeetCode challenges locally in seconds. Give it a problem number and get a full project setup — solution interface/type, stub implementation, and parameterized tests — ready to solve in your IDE.
 
 ## Quick Start
 
@@ -12,15 +12,16 @@ Just give Claude Code a problem number and it handles everything:
 
 This single command will:
 
-1. Look up the problem on LeetCode (name, method signature, types)
-2. Run the scaffolding script to generate the package structure
-3. Write comprehensive test cases — all LeetCode examples plus edge cases
+1. Ask which language(s) to scaffold (Java, TypeScript, or both)
+2. Look up the problem on LeetCode (name, method signature, types)
+3. Run the scaffolding script to generate the project structure
+4. Write comprehensive test cases — all LeetCode examples plus edge cases
 
 You go from problem number to a fully test-driven setup in seconds. All that's left is writing the solution.
 
 ### Manual Scaffolding
 
-The underlying script can also be run directly:
+#### Java
 
 ```bash
 bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnType>' '<params>' '[title]' '[description]'
@@ -31,7 +32,20 @@ bash scripts/new-challenge.sh <number> <snake_case_name> <methodName> '<returnTy
 bash scripts/new-challenge.sh 1 two_sum twoSum 'int[]' 'int[] nums, int target' 'Two Sum' 'Given an array of integers...'
 ```
 
+#### TypeScript
+
+```bash
+bash scripts/new-challenge-ts.sh <number> <kebab-name> <functionName> '<returnType>' '<params>' '[title]' '[description]'
+```
+
+```bash
+# Example
+bash scripts/new-challenge-ts.sh 1 two-sum twoSum 'number[]' 'nums: number[], target: number' 'Two Sum' 'Given an array of integers...'
+```
+
 ## Structure
+
+### Java
 
 Each problem lives in its own package under `com.leetcode.p{number}_{name}`:
 
@@ -39,8 +53,23 @@ Each problem lives in its own package under `com.leetcode.p{number}_{name}`:
 - `Default.java` / other classes — different solution approaches
 - `SolutionTest.java` — parameterized tests that run against all implementations
 
+### TypeScript
+
+Each problem lives in its own directory under `typescript/src/p{number}-{name}`:
+
+- `solution.ts` — type alias, named function exports (one per approach), `solutions` array
+- `solution.test.ts` — vitest parameterized tests using `describe.each`
+
 ## Running Tests
+
+### Java
 
 ```bash
 mvn test
+```
+
+### TypeScript
+
+```bash
+cd typescript && npm test
 ```
