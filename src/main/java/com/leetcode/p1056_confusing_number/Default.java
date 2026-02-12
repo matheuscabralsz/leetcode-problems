@@ -20,6 +20,8 @@ public class Default implements Solution {
 
         int i = str.length() - 1;
 
+        //TODO: try with lambda
+
         while (i >= 0) {
             char c = str.charAt(i);
             Character rotatedChar = rotable.get(c);
