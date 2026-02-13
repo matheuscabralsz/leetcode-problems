@@ -1,5 +1,8 @@
 package com.leetcode.p0651_four_keys_keyboard;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 651. 4 Keys Keyboard
  *
@@ -16,5 +19,11 @@ package com.leetcode.p0651_four_keys_keyboard;
  * 1 <= n <= 50
  */
 public interface Solution {
-    int maxA(int n);
+    default int maxA(int n) {
+        return maxA(n, new HashMap<>());
+    }
+
+    default int maxA(int n, Map<Integer, Integer> memo) {
+        return maxA(n);
+    }
 }

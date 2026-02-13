@@ -11,7 +11,9 @@ class SolutionTest {
 
     static Stream<Solution> solutions() {
         return Stream.of(
-                new Default()
+                new Recursion(),
+                new DynamicProgrammingMemo(),
+                new DynamicProgramming()
         );
     }
 
