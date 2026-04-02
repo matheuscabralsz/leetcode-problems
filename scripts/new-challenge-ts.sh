@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: new-challenge-ts.sh <number> <kebab-case-name> <functionName> <returnType> <params> [title] [description]
-# Example: new-challenge-ts.sh 1 two-sum twoSum "number[]" "nums: number[], target: number" "Two Sum" "Given an array..."
+# Usage: new-challenge-ts.sh <number> <snake_case_name> <functionName> <returnType> <params> [title] [description]
+# Example: new-challenge-ts.sh 1 two_sum twoSum "number[]" "nums: number[], target: number" "Two Sum" "Given an array..."
 
 if [[ $# -lt 5 ]]; then
-  echo "Usage: $0 <number> <kebab-case-name> <functionName> <returnType> <params> [title] [description]"
-  echo "Example: $0 1 two-sum twoSum 'number[]' 'nums: number[], target: number' 'Two Sum' 'Given an array...'"
+  echo "Usage: $0 <number> <snake_case_name> <functionName> <returnType> <params> [title] [description]"
+  echo "Example: $0 1 two_sum twoSum 'number[]' 'nums: number[], target: number' 'Two Sum' 'Given an array...'"
   exit 1
 fi
 
@@ -21,20 +21,21 @@ DESCRIPTION="${7:-}"
 # Zero-pad number to 4 digits
 PADDED=$(printf "%04d" "$NUMBER")
 
-DIR_NAME="p${PADDED}-${NAME}"
+DIR_NAME="p${PADDED}_${NAME}"
 
 # Resolve project root (parent of scripts/)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-SRC_DIR="${PROJECT_ROOT}/typescript/src/${DIR_NAME}"
+PROBLEM_DIR="${PROJECT_ROOT}/problems/${DIR_NAME}"
+TS_DIR="${PROBLEM_DIR}/typescript"
 
-if [[ -d "$SRC_DIR" ]]; then
-  echo "Error: directory already exists: ${SRC_DIR}"
+if [[ -d "$TS_DIR" ]]; then
+  echo "Error: TypeScript directory already exists: ${TS_DIR}"
   exit 1
 fi
 
-mkdir -p "$SRC_DIR"
+mkdir -p "$TS_DIR"
 
 # --- Build type alias name from function name (PascalCase + Fn) ---
 TYPE_NAME="$(echo "${FUNC:0:1}" | tr '[:lower:]' '[:upper:]')${FUNC:1}Fn"
@@ -66,7 +67,7 @@ if [[ -n "$TITLE" || -n "$DESCRIPTION" ]]; then
 fi
 
 # --- solution.ts ---
-cat > "${SRC_DIR}/solution.ts" <<EOF
+cat > "${TS_DIR}/solution.ts" <<EOF
 ${COMMENT}export type ${TYPE_NAME} = (${PARAMS}) => ${RETURN_TYPE};
 
 export const default${TYPE_NAME}: ${TYPE_NAME} = (${PARAMS}) => {
@@ -76,8 +77,8 @@ export const default${TYPE_NAME}: ${TYPE_NAME} = (${PARAMS}) => {
 export const solutions: ${TYPE_NAME}[] = [default${TYPE_NAME}];
 EOF
 
-# --- solution.test.ts ---
-cat > "${SRC_DIR}/solution.test.ts" <<EOF
+# --- _solution.test.ts ---
+cat > "${PROBLEM_DIR}/_solution.test.ts" <<EOF
 import { describe, test, expect } from "vitest";
 import { solutions } from "./solution";
 
@@ -89,5 +90,5 @@ describe.each(solutions)("${FUNC} - %o", (${FUNC}) => {
 EOF
 
 echo "Scaffolded LeetCode #${NUMBER} (${NAME}) in ${DIR_NAME}"
-echo "  ${SRC_DIR}/solution.ts"
-echo "  ${SRC_DIR}/solution.test.ts"
+echo "  ${TS_DIR}/solution.ts"
+echo "  ${PROBLEM_DIR}/_solution.test.ts"

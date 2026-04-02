@@ -36,5 +36,5 @@ build/
 .DS_Store
 
 ### TypeScript ###
-typescript/node_modules/
-typescript/dist/
+node_modules/
+dist/

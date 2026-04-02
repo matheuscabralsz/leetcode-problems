@@ -22,21 +22,20 @@ DESCRIPTION="${7:-}"
 PADDED=$(printf "%04d" "$NUMBER")
 
 PACKAGE="p${PADDED}_${NAME}"
-PKG_DOT="com.leetcode.${PACKAGE}"
 
 # Resolve project root (parent of scripts/)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-MAIN_DIR="${PROJECT_ROOT}/src/main/java/com/leetcode/${PACKAGE}"
-TEST_DIR="${PROJECT_ROOT}/src/test/java/com/leetcode/${PACKAGE}"
+PROBLEM_DIR="${PROJECT_ROOT}/problems/${PACKAGE}"
+JAVA_DIR="${PROBLEM_DIR}/java/${PACKAGE}"
 
-if [[ -d "$MAIN_DIR" ]]; then
-  echo "Error: package already exists: ${MAIN_DIR}"
+if [[ -d "$JAVA_DIR" ]]; then
+  echo "Error: Java directory already exists: ${JAVA_DIR}"
   exit 1
 fi
 
-mkdir -p "$MAIN_DIR" "$TEST_DIR"
+mkdir -p "$JAVA_DIR"
 
 # --- Build default return statement based on return type ---
 case "$RETURN_TYPE" in
@@ -52,7 +51,7 @@ esac
 
 # --- Solution.java (interface) ---
 {
-  echo "package ${PKG_DOT};"
+  echo "package ${PACKAGE};"
   echo ""
   if [[ -n "$TITLE" || -n "$DESCRIPTION" ]]; then
     echo "/**"
@@ -70,11 +69,11 @@ esac
   echo "public interface Solution {"
   echo "    ${RETURN_TYPE} ${METHOD}(${PARAMS});"
   echo "}"
-} > "${MAIN_DIR}/Solution.java"
+} > "${JAVA_DIR}/Solution.java"
 
 # --- Default.java (stub implementation) ---
-cat > "${MAIN_DIR}/Default.java" <<EOF
-package ${PKG_DOT};
+cat > "${JAVA_DIR}/Default.java" <<EOF
+package ${PACKAGE};
 
 public class Default implements Solution {
     @Override
@@ -84,9 +83,9 @@ public class Default implements Solution {
 }
 EOF
 
-# --- SolutionTest.java (parameterized test template) ---
-cat > "${TEST_DIR}/SolutionTest.java" <<EOF
-package ${PKG_DOT};
+# --- _SolutionTest.java (parameterized test template) ---
+cat > "${JAVA_DIR}/_SolutionTest.java" <<EOF
+package ${PACKAGE};
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -95,7 +94,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SolutionTest {
+class _SolutionTest {
 
     static Stream<Solution> solutions() {
         return Stream.of(
@@ -112,6 +111,6 @@ class SolutionTest {
 EOF
 
 echo "Scaffolded LeetCode #${NUMBER} (${NAME}) in ${PACKAGE}"
-echo "  ${MAIN_DIR}/Solution.java"
-echo "  ${MAIN_DIR}/Default.java"
-echo "  ${TEST_DIR}/SolutionTest.java"
+echo "  ${JAVA_DIR}/Solution.java"
+echo "  ${JAVA_DIR}/Default.java"
+echo "  ${JAVA_DIR}/_SolutionTest.java"

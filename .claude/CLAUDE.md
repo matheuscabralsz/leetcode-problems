@@ -11,32 +11,34 @@ A Java 17 Maven + TypeScript Vitest project for solving LeetCode problems with m
 
 ## Project Structure
 
-### Java
+All problems are co-located in a single flat directory per problem under `problems/`:
 
 ```
-src/main/java/com/leetcode/p{NNNN}_{snake_name}/
-  Solution.java      — interface defining the LeetCode method signature
-  Default.java       — stub/first implementation
-  *.java             — additional solution approaches (e.g., BruteForce, OptimalHashMap)
-
-src/test/java/com/leetcode/p{NNNN}_{snake_name}/
-  SolutionTest.java  — parameterized tests that run against ALL implementations
-```
-
-### TypeScript
-
-```
-typescript/src/p{NNNN}-{kebab-name}/
-  solution.ts        — type alias, named exports (one function per approach), solutions array
-  solution.test.ts   — vitest parameterized tests using describe.each
+problems/p{NNNN}_{snake_name}/
+  Solution.java        — interface defining the LeetCode method signature
+  Default.java         — stub/first implementation
+  *.java               — additional solution approaches (e.g., BruteForce, OptimalHashMap)
+  _SolutionTest.java   — parameterized tests that run against ALL Java implementations
+  solution.ts          — type alias, named exports (one function per approach), solutions array
+  _solution.test.ts    — vitest parameterized tests using describe.each
 ```
 
 ## Conventions
 
+### Directory naming
+- Format: `p{NNNN}_{snake_case_name}` (number is zero-padded to 4 digits)
+- Examples: `p0001_two_sum`, `p0217_contains_duplicate`, `p0219_contains_duplicate_ii`
+- Snake_case is used for all directories (Java packages cannot contain hyphens)
+
+### Test file naming
+- Test files are prefixed with underscore (`_`) to visually separate them from source files
+- Java: `_SolutionTest.java` (class `_SolutionTest`)
+- TypeScript: `_solution.test.ts`
+
 ### Java
 
 #### Package naming
-- Format: `com.leetcode.p{NNNN}_{snake_case_name}` (number is zero-padded to 4 digits)
+- Format: `p{NNNN}_{snake_case_name}` (number is zero-padded to 4 digits)
 - Examples: `p0001_two_sum`, `p0217_contains_duplicate`, `p0219_contains_duplicate_ii`
 
 #### Solution pattern
@@ -46,7 +48,7 @@ typescript/src/p{NNNN}-{kebab-name}/
 - Name classes descriptively: `BruteForce`, `OptimalHashMap`, `WithStreams`, etc.
 
 #### Test pattern
-- One `SolutionTest` class per problem
+- One `_SolutionTest` class per problem
 - A `solutions()` static method returns a `Stream<Solution>` of all implementations
 - Every test method is `@ParameterizedTest` + `@MethodSource("solutions")` so it runs against all approaches
 - Test method names are descriptive: `example1_duplicateWithinRange`, `emptyArray`, `kIsZero_noDuplicatePossible`
@@ -55,10 +57,6 @@ typescript/src/p{NNNN}-{kebab-name}/
 
 ### TypeScript
 
-#### Directory naming
-- Format: `p{NNNN}-{kebab-case-name}` (number is zero-padded to 4 digits)
-- Examples: `p0001-two-sum`, `p0217-contains-duplicate`, `p0219-contains-duplicate-ii`
-
 #### Solution pattern
 - A type alias defines the function signature (e.g., `type TwoSumFn = (nums: number[], target: number) => number[]`)
 - Each approach is a named export implementing the type alias
@@ -66,7 +64,7 @@ typescript/src/p{NNNN}-{kebab-name}/
 - Name functions descriptively: `bruteForce`, `withHashMap`, `withStreams`, etc.
 
 #### Test pattern
-- One `solution.test.ts` file per problem, colocated with `solution.ts`
+- One `_solution.test.ts` file per problem, colocated with `solution.ts`
 - Uses `describe.each(solutions)` to run all tests against every implementation
 - Test names are descriptive: `"example 1"`, `"empty array"`, `"single element"`
 - Include all LeetCode examples plus edge cases
@@ -75,21 +73,21 @@ typescript/src/p{NNNN}-{kebab-name}/
 
 ### Java
 - `mvn test` — run all Java tests
-- `mvn test -pl . -Dtest="com.leetcode.p0219_contains_duplicate_ii.SolutionTest"` — run tests for a specific problem
+- `mvn test -Dtest="p0219_contains_duplicate_ii._SolutionTest"` — run tests for a specific problem
 
 ### TypeScript
-- `cd typescript && npm test` — run all TypeScript tests
-- `cd typescript && npx vitest run src/p0001-two-sum/` — run tests for a specific problem
-- `cd typescript && npm run test:watch` — run tests in watch mode
+- `npm test` — run all TypeScript tests
+- `npx vitest run problems/p0001_two_sum/` — run tests for a specific problem
+- `npm run test:watch` — run tests in watch mode
 
 ### Scaffolding
 - `/new-challenge <number>` — scaffold a new problem (asks for language choice, looks up details, generates files, writes tests)
 - `bash scripts/new-challenge.sh <number> <snake_name> <methodName> '<returnType>' '<params>' '[title]' '[description]'` — manual Java scaffolding
-- `bash scripts/new-challenge-ts.sh <number> <kebab-name> <functionName> '<returnType>' '<params>' '[title]' '[description]'` — manual TypeScript scaffolding
+- `bash scripts/new-challenge-ts.sh <number> <snake_name> <functionName> '<returnType>' '<params>' '[title]' '[description]'` — manual TypeScript scaffolding
 
 ## When Adding a New Problem
 
 1. Use `/new-challenge <number>` or run the appropriate scaffolding script manually
 2. Write solution implementations (Java: classes implementing `Solution`; TypeScript: named function exports)
-3. Register each implementation (Java: `SolutionTest.solutions()`; TypeScript: `solutions` array in `solution.ts`)
-4. Run tests to verify (`mvn test` for Java, `cd typescript && npm test` for TypeScript)
+3. Register each implementation (Java: `_SolutionTest.solutions()`; TypeScript: `solutions` array in `solution.ts`)
+4. Run tests to verify (`mvn test` for Java, `npm test` for TypeScript)
